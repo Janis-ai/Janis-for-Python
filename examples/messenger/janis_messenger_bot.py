@@ -5,7 +5,7 @@ in any messages that the bot receives and echos it back.
 from flask import Flask, request
 from pymessenger.bot import Bot
 from pymessenger import Element, Button
-from janis import janis
+from janis import Janis
 import json
 
 app = Flask(__name__)
@@ -16,7 +16,7 @@ VERIFY_TOKEN = ''
 JANIS_API_KEY = ''
 JANIS_CLIENT_KEY = ''
 bot = Bot(ACCESS_TOKEN)
-janis = janis(JANIS_API_KEY,JANIS_CLIENT_KEY,'messenger', ACCESS_TOKEN)
+janis = Janis(JANIS_API_KEY,JANIS_CLIENT_KEY,'messenger', ACCESS_TOKEN)
 
 def onChatResponse(self, args):
     try:

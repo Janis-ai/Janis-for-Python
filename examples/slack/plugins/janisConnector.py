@@ -1,12 +1,12 @@
 from __future__ import print_function
 from __future__ import unicode_literals
-from janis import janis
+from janis import Janis
 from rtmbot.core import Plugin, Job
 from slackclient import SlackClient
 
 JANIS_API_KEY = ""
 JANIS_CLIENT_KEY = ""
-janis = janis(JANIS_API_KEY,JANIS_CLIENT_KEY,'slack')
+janis = Janis(JANIS_API_KEY,JANIS_CLIENT_KEY,'slack')
 
 
 class janisListener():

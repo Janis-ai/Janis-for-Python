@@ -3,7 +3,7 @@ import threading
 from socketIO_client import SocketIO
 
 
-class janis:
+class Janis:
     def __init__(self, api_key, client_key, platform, *access_token, **kwargs):
         """
             @required:
@@ -20,11 +20,11 @@ class janis:
         if kwargs.get('serverRoot'):
             self.serverRoot = kwargs.get('serverRoot')
         else:
-            self.serverRoot = 'https://janisapi.herokuapp.com'
+            self.serverRoot = 'https://wordhopapi.herokuapp.com'
         if kwargs.get('socketServer'):
             self.socketServer = kwargs.get('socketServer')
         else:
-            self.socketServer = 'https://janis-socket-server.herokuapp.com'
+            self.socketServer = 'https://wordhop-socket-server.herokuapp.com'
         if kwargs.get('path'):
             self.path = kwargs.get('path')
         else:
