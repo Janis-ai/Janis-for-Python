@@ -69,9 +69,10 @@ class Janis:
             self.callbacks = {}
             
             if event_name not in self.callbacks:
-                self.callbacks[event_name] = [callback]
+                self.callbacks.setdefault(event_name,[callback])
         else:
-            self.callbacks[event_name].append(callback)
+            a = self.callbacks.setdefault(event_name,[callback])
+            a.append(callback)
         
     def trigger(self, event_name, args):
         if self.callbacks is not None and event_name in self.callbacks:

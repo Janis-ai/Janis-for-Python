@@ -1,2 +1,2 @@
-from .janis import janis
+from .janis import Janis
 

@@ -25,7 +25,7 @@ def onChatResponse(self, args):
         text = args["text"]
         bot.send_text_message(channel, text)
     except Exception as e:
-        print(e, exc_info=True)
+        print(e, sys.exc_info())
 
 janis.on('chat_response', onChatResponse)
 
@@ -34,7 +34,7 @@ def onChannelUpdate(self, args):
     try:
         print('janis channel_update args:' + str(args))
     except Exception as e:
-        print(e, exc_info=True)
+        print(e, sys.exc_info())
     
 janis.on('channel_update', onChannelUpdate)
 

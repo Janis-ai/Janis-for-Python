@@ -24,5 +24,5 @@ Open [JANIS_messenger_bot.py](./JANIS_messenger_bot.py) and modify `JANIS_API_KE
 Run the following command to get your bot online:
 
 ```bash
-$ python JANIS_messenger_bot.py
+$ python janis_messenger_bot.py
 ```
