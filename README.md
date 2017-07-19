@@ -1,5 +1,5 @@
 # [Janis](https://www.Janis.ai) - Your Bot Manager
-## For Bots Built in Python
+## For bots built with python
 
 Janis helps teams train and monitor bots and fix problems fast.  [Build a bot in Python](./examples/) and integrate Janis with just a few lines of code to ensure delightful conversational experiences in every messaging channel.
 
@@ -17,7 +17,6 @@ To learn more about Janis' capabilities, visit [Janis.ai](https://www.janis.ai)
 ### What you need to get started:
 * [Add Janis to your Slack team](https://www.janis.ai)
 * [A Chatbot built in Python](./examples/)
-* [Optional: An API.AI account](http://www.api.ai) 
 
 ##### Operational Dependencies:
 1.  You'll need an API key from Janis and a Client Key for each Chatbot you register with Janis.  You can get both of those (free) when you add Janis to Slack. 
