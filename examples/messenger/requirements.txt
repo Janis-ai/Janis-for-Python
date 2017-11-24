@@ -3,3 +3,6 @@ requests
 requests-toolbelt
 six
 janis
+python-dotenv
+Flask
+pymessenger

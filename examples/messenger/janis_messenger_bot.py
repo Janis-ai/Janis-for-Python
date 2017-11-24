@@ -16,38 +16,12 @@ VERIFY_TOKEN = ''
 JANIS_API_KEY = ''
 JANIS_CLIENT_KEY = ''
 bot = Bot(ACCESS_TOKEN)
-janis = Janis(JANIS_API_KEY,JANIS_CLIENT_KEY,'messenger', ACCESS_TOKEN)
-
-def onChatResponse(self, args):
-    try:
-        print('janis chat_response args:' + str(args))
-        channel = args["channel"]
-        text = args["text"]
-        bot.send_text_message(channel, text)
-    except Exception as e:
-        print(e, sys.exc_info())
-
-janis.on('chat_response', onChatResponse)
-
-
-def onChannelUpdate(self, args):
-    try:
-        print('janis channel_update args:' + str(args))
-    except Exception as e:
-        print(e, sys.exc_info())
-    
-janis.on('channel_update', onChannelUpdate)
-
+janis = Janis(JANIS_API_KEY,JANIS_CLIENT_KEY,'messenger', ACCESS_TOKEN, useWebhook=True)
 
 @app.route("/", methods=['GET', 'POST'])
 
-
 def hello():
-    def sendIt(channel, text):
-        response = bot.send_text_message(channel, text)
-        messageData = {'recipient': {'id': channel},'message': {'text': text}}
-        janis.hopOut(messageData)
-
+    
     if request.method == 'GET':
         if request.args.get("hub.verify_token") == VERIFY_TOKEN:
             return request.args.get("hub.challenge")
@@ -59,37 +33,45 @@ def hello():
         print(output)
         
         for event in output['entry']:
-            messaging = event['messaging']
-            for messageData in messaging:
-                j = json.dumps(messageData)
-                hopInResponse = janis.hopIn(messageData)
-                
-                if messageData.get('message'):
-                    # If your bot is paused, stop it from replying
-                    if hopInResponse.get('paused'):
-                        return "Success"
-                    recipient_id = messageData['sender']['id']
-                    if messageData['message'].get('text'):
-                        message = messageData['message']['text']
-                        if message == 'hi':
-                            sendIt(recipient_id, 'Hello there.')
-                        elif message == 'help':
-                            # let the user know that they are being routed to a human
-                            sendIt(recipient_id, 'Hang tight. Let me see what I can do.')
-                            # send a janis alert to your slack channel
-                            # that the user could use assistance
-                            janis.assistanceRequested(messageData)
-                        else:
-                            # let the user know that the bot does not understand
-                            sendIt(recipient_id, 'Huh?')
-                            # capture conversational dead-ends.
-                            janis.logUnknownIntent(messageData)
-                                
-                    if messageData['message'].get('attachment'):
-                        bot.send_attachment_url(recipient_id, messageData['message']['attachment']['type'],
-                                                messageData['message']['attachment']['payload']['url'])
-                else:
-                    pass
+            if event.get('messaging'):
+                messaging = event['messaging']
+                for messageData in messaging:
+                    j = json.dumps(messageData)
+                    
+                    if messageData.get('message'):
+                        
+                        recipient_id = messageData['sender']['id']
+                        if messageData['message'].get('is_echo'):
+                            # See: https://developers.facebook.com/docs/messenger-platform/handover-protocol#app_roles
+                            # This app should be the Primary Receiver. Janis should be a Secondary Receiver.
+                            # Every time an echo from either Janis or the Page Inbox is received,
+                            # this app passes control over to Janis so the humans are the only ones who can respond.
+                            # Janis will pass control back to this app again after 10 minutes of inactivity.
+                            # If you want to manually pass back control, use the slash command `/resume`
+                            # in the Janis transcript channel, or press "Done" in the Page Inbox on the thread.
+                            janis.passThreadControl(messageData)
+                            return "Success"
+                        if messageData['message'].get('text'):
+                            message = messageData['message']['text']
+                            if message == 'hi':
+                                response = bot.send_text_message(recipient_id, 'Hello there!')
+                            elif message == 'help':
+                                # let the user know that they are being routed to a human
+                                response = bot.send_text_message(recipient_id, 'Hang tight. Let me see what I can do.')
+                                # send a janis alert to your slack channel
+                                # that the user could use assistance
+                                janis.assistanceRequested(messageData)
+                            else:
+                                # let the user know that the bot does not understand
+                                response = bot.send_text_message(recipient_id, 'Huh?')
+                                # capture conversational dead-ends.
+                                janis.logUnknownIntent(messageData)
+                        
+                        if messageData['message'].get('attachment'):
+                            bot.send_attachment_url(recipient_id, messageData['message']['attachment']['type'],
+                                                    messageData['message']['attachment']['payload']['url'])
+                    else:
+                        pass
         return "Success"
 
 
