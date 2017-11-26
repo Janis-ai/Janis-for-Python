@@ -11,10 +11,10 @@ import json
 app = Flask(__name__)
 
 
-ACCESS_TOKEN = ''
-VERIFY_TOKEN = ''
-JANIS_API_KEY = ''
-JANIS_CLIENT_KEY = ''
+ACCESS_TOKEN = '<ACCESS_TOKEN>'
+VERIFY_TOKEN = '<VERIFY_TOKEN>'
+JANIS_API_KEY = '<JANIS_API_KEY>'
+JANIS_CLIENT_KEY = '<JANIS_CLIENT_KEY>'
 bot = Bot(ACCESS_TOKEN)
 janis = Janis(JANIS_API_KEY,JANIS_CLIENT_KEY,'messenger', ACCESS_TOKEN, useWebhook=True)
 
@@ -30,7 +30,6 @@ def hello():
 
     if request.method == 'POST':
         output = request.get_json()
-        print(output)
         
         for event in output['entry']:
             if event.get('messaging'):
